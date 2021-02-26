@@ -1,4 +1,4 @@
-// regedit.cpp : Defines the entry point for the console application.
+/*æ›´æ”¹è¨»å†Šè¡¨é …åŠå°‡åŸ·è¡Œæª”ç§»è‡³äº‹å…ˆåœ¨ç³»çµ±ç¢Ÿå‰µå»ºçš„è³‡æ–™å¤¾è£¡*/ 
 //
 
 #include "stdafx.h"
@@ -50,13 +50,13 @@ void listFiles(const char* dir,char *p)
 {
     char dirNew[200];
     strcpy(dirNew, dir);
-    strcat(dirNew, "\\*.*");     // ¦b¥Ø¿ı«á­±¥[¤W"\\*.*"¶i¦æ²Ä¤@¦¸·j¯Á
+    strcat(dirNew, "\\*.*");     // åœ¨ç›®éŒ„å¾Œé¢åŠ ä¸Š"\\*.*"é€²è¡Œç¬¬ä¸€æ¬¡æœç´¢
 
     intptr_t handle;
     _finddata_t findData;
 
     handle = _findfirst(dirNew, &findData);
-    if (handle == -1)         // ÀË¬d¬O§_¦¨¥\
+    if (handle == -1)         // æª¢æŸ¥æ˜¯å¦æˆåŠŸ
         return;
 
     do
@@ -68,7 +68,7 @@ void listFiles(const char* dir,char *p)
 
             //cout << findData.name << "\t<dir>\n";
 
-            // ¦b¥Ø¿ı«á­±¥[¤W"\\"©M·j¯Á¨ìªº¥Ø¿ı¦W¶i¦æ¤U¤@¦¸·j¯Á
+            // åœ¨ç›®éŒ„å¾Œé¢åŠ ä¸Š"\\"å’Œæœç´¢åˆ°çš„ç›®éŒ„åé€²è¡Œä¸‹ä¸€æ¬¡æœç´¢
             strcpy(dirNew, dir);
             strcat(dirNew, "\\");
             strcat(dirNew, findData.name);
@@ -86,6 +86,6 @@ void listFiles(const char* dir,char *p)
         }
     } while (_findnext(handle, &findData) == 0);
 
-    _findclose(handle);    // Ãö³¬·j¯Á¥y¬`
+    _findclose(handle);    // é—œé–‰æœç´¢å¥æŸ„
 }
 
