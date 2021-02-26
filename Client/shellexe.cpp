@@ -1,4 +1,4 @@
-// shellexe.cpp : Defines the entry point for the console application.
+/*向使用者取得最高權限來執行regedit.cpp所編譯成的regedit1.exe*/ 
 //
 
 #include "stdafx.h"
