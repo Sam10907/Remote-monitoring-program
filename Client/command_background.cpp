@@ -1,4 +1,4 @@
-// command_background.cpp : Defines the entry point for the console application.
+/*將程式執行畫面隱藏起來*/ 
 //
 
 #include "stdafx.h"
