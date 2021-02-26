@@ -1,4 +1,4 @@
-// dll_opencv.cpp : Defines the exported functions for the DLL application.
+/*å°‡ç›¸æ©Ÿç›£æ§å‡½å¼å’Œè¢å¹•ç›£æ§å‡½å¼è£½ä½œæˆdllæª”ä¾›å‹•æ…‹èª¿ç”¨*/ 
 //
 #include "stdafx.h"
 #include "dll_opencv.h"
@@ -59,7 +59,7 @@ void video_monitor(SOCKET socket) {
     int bbytee;
     cout << "before open the cam" << endl;
 
-    VideoCapture cap(0); //§ì¨ú¬Û¾÷³]³Æ
+    VideoCapture cap(0); //æŠ“å–ç›¸æ©Ÿè¨­å‚™
 
     if (!cap.isOpened()) {
         cout << "Could not open the camera" << endl;
@@ -74,7 +74,7 @@ void video_monitor(SOCKET socket) {
     //Mat frame;
     while (1) {
         int rbytes;
-        char message[50] = ""; //±µ¦¬²×¤î°T®§
+        char message[50] = ""; //æ¥æ”¶çµ‚æ­¢è¨Šæ¯
         cap >> frame;
         if (frame.empty()) {
             cerr << "[client] VideoCapture(0) error!" << endl;
@@ -84,14 +84,14 @@ void video_monitor(SOCKET socket) {
 
         if ((rbytes = recv(socket, message, sizeof(message), 0)) == 0) {}
         else
-        { //¦¬¨ì²×¤î°T®§«á²×¤î
+        { //æ”¶åˆ°çµ‚æ­¢è¨Šæ¯å¾Œçµ‚æ­¢
             if (!strcmp(message, "monitor end")) {
                 printf("out\n");
                 break;
             }
         }
 
-        while (1) { //¥Ñ©ó¬Onon blocking ©Ò¥H¥²¶·µ¥send()¦¨¥\«á¤~¸õ¥X°j°é
+        while (1) { //ç”±æ–¼æ˜¯non blocking æ‰€ä»¥å¿…é ˆç­‰send()æˆåŠŸå¾Œæ‰è·³å‡ºè¿´åœˆ
             bbytee = send(socket, (char*)frame.data, imgSize, 0);
             if (bbytee < 0){
 				continue; // errno == EINPROGRESS
@@ -121,7 +121,7 @@ void screen_monitor(SOCKET socket){
         capDesktop.read();
         cvtColor(capDesktop.image, bgrImg, COLOR_BGRA2BGR);
 		int rbytes;
-        char message[50] = ""; //±µ¦¬²×¤î°T®§
+        char message[50] = ""; //æ¥æ”¶çµ‚æ­¢è¨Šæ¯
 		int frame_size = bgrImg.total()*bgrImg.elemSize();
 		int image_row = bgrImg.rows;
 		int image_col = bgrImg.cols;
@@ -132,7 +132,7 @@ void screen_monitor(SOCKET socket){
         cout << ++cnt << ":" << bgrImg.isContinuous() << "," << bgrImg.size() << endl;
         if ((rbytes = recv(socket, message, sizeof(message), 0)) == 0) {}
         else
-        { //¦¬¨ì²×¤î°T®§«á²×¤î
+        { //æ”¶åˆ°çµ‚æ­¢è¨Šæ¯å¾Œçµ‚æ­¢
             if (!strcmp(message, "monitor end")) {
                 printf("out\n");
                 break;
@@ -158,7 +158,7 @@ void screen_monitor(SOCKET socket){
 			}
 		}
 		
-        while (1) { //¥Ñ©ó¬Onon blocking ©Ò¥H¥²¶·µ¥send()¦¨¥\«á¤~¸õ¥X°j°é
+        while (1) { //ç”±æ–¼æ˜¯non blocking æ‰€ä»¥å¿…é ˆç­‰send()æˆåŠŸå¾Œæ‰è·³å‡ºè¿´åœˆ
 			bbytee = send(socket, (char*)bgrImg.data, frame_size, 0);
             if (bbytee < 0) continue; //errno == EINPROGRESS
             else break;
